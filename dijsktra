@@ -1,0 +1,59 @@
+from collections import defaultdict
+
+class Graph:
+    def __init__(self):
+        self.nodes = set()
+        self.edges = defaultdict(list)
+        self.distance = {}
+
+    def add_node(self,node):
+        self.nodes.add(node)
+
+    def add_edge(self,from_point, to_point,distance):
+        self.edges[from_point].append(to_point)
+        self.distance[(from_point, to_point)] = distance
+
+
+class Node:
+    def __init__(self):
+        self.distance = float('inf')
+        self.predecessor = None
+        self.name = None
+
+    def set_distance(self,dist):
+        self.distance = dist
+
+    def set_predecessor(self,pred):
+        self.predecessor = pred
+
+    def get_distance(self):
+        return self.distance
+
+    def get_predecessor(self):
+        return self.predecessor
+
+
+def dijsktra(graph,initial,end):
+    permanent = set()
+    temporary = set()
+    temporary.add(initial)
+    initial.set_distance(0)
+    while temporary:
+        min_node = None
+        for node in temporary:
+            if min_node is None:
+                min_node = node
+            elif node.get_distance() < min_node.get_distance():
+                min_node = node
+        temporary.remove(min_node)
+        permanent.add(min_node)
+        current_distance = min_node.get_distance()
+        for neighbour in graph.edges[min_node]:
+            new_distance = current_distance +graph.distance[(min_node, neighbour)]
+            if neighbour not in permanent and new_distance < neighbour.get_distance():
+                neighbour.set_distancce(new_distance)        #每次都更新从该点到起点的最短距离
+                neighbour.set_predecessor(min_node)
+                temporary.add(neighbour)
+
+
+
