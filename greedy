@@ -1,0 +1,48 @@
+#huffman tree
+class node:
+    def __init__(self,freq):
+        self.left = None
+        self.right = None
+        self.father = None
+        self.freq = freq
+
+    def isleft(self):
+        return self.father.left == self
+
+def createNodes(freqs):
+    return [node(freq) for freq in freqs]
+
+def createhuffman(nodes):
+    queue = nodes[:]
+    while len(queue) > 1:
+        queue.sort(key = lambda x:x.freq)
+        node_left = queue.pop(0)
+        node_right = queue.pop(0)
+        node_father = node(node_left.freq + node_right.freq)
+        node_father.left = node_left
+        node_father.right = node_right
+        node_left.father = node_father
+        node_right.father = node_father  #生成一个单元树，频率小的在左边，大的在右边，中间为和
+        queue.append(node_father)    #单元树加入到列队后面
+    queue[0].father = None
+    return queue[0]
+
+def huffmancode(nodes,root):
+    codes = [' ']*len(nodes)
+    for i in range(len(nodes)):
+        node_temp = nodes[i]
+        while node_temp != root:
+            if node_temp.isleft():
+                codes[i] = '0'+codes[i]
+            else:
+                codes[i] = '1' + codes[i]
+            node_temp = node_temp.father
+    return codes
+
+
+if __name__ =='__main__':
+    chars_freq = [( )]
+    nodes = createNodes([i for i in chars_freq])
+    root = createhuffman(nodes)
+    code = huffmancode(nodes,root)
+
