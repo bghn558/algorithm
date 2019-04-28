@@ -1,0 +1,66 @@
+
+class solution(object):
+
+    def solveNqueens(self, n):
+        self.helper([-1]*n, 0, n)
+
+    def helper(self, columnposition, rowindex, n):
+        if rowindex == n:
+            self.printsolution(columnposition,n)
+            return
+        for column in range(n):
+            columnposition[rowindex] = column
+            if self.isvalid(columnposition, rowindex):
+                self.helper(columnposition, rowindex+1, n)
+
+    def isvalid(self,columnposition,rowindex):
+        for i in range(rowindex):
+            if columnposition[i]==columnposition[rowindex]:
+                return False
+            elif abs(columnposition[i]-columnposition[rowindex])==rowindex-i:
+                return False
+        return True
+
+    def printsolution(self, columnposition, n):
+        for row in range(n):
+            line = ''
+            for column in range(n):
+                if columnposition[row] == column:
+                    line += 'Q'
+                else:
+                    line += '.'
+            print(line)
+        print('\n')
+
+
+class sudoku:
+     def solvesudoku(self, board):
+         self.helper(board, 0)
+
+     def helper(self ,board, index):
+         if index >= 81:
+             self.printsolution(board)
+             return
+         if board[index] == 0:
+             for i in range(1,10):
+                 if self.isvalid(board,index,i):
+                     board[index] = i
+                     self.helper(board,index+1)
+                     board[index] = 0
+         else:
+             self.helper(board, index+1)
+
+     def printsolution(self,board):
+         for i in range(0,81,9):
+             print(board[i:i+9])
+
+     def isvalid(self,board,index,num):
+         row = index//9
+         column = index % 9
+         for i in range(index+9, 81, 9):
+             if board[i] ==num:
+                 return False
+         for i in range(index-9, 81, 9):
+             if board[i] == num:
+                 return False
+         #.....5
