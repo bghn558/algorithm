@@ -1,0 +1,19 @@
+class solution():
+    def floyed(self,dist,start,end):
+        n = len(dist)
+        path = self.createpath(n)
+        for k in range(n):
+            for i in range(n):
+                for j in range(n):#两点之间逐次添加1-n个点分别算最短值
+                    if dist[i][j] > dist[i][k]+dist[k][j]:
+                        dist[i][j] = dist[i][k]+dist[k][j]
+                        path[i][j] = path[i][k]
+
+    def createpath(self, n):
+        path = []
+        for i in range(n):
+            row = []
+            for j in range(n):
+                row.append(j)
+            path.append(row)
+        return path
